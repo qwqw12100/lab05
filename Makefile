@@ -1,6 +1,8 @@
 CC=gcc
 CFLAGS=-lWarn -pedantic
 
+all:    tester irtester blink button
+
 tester: tester.o libmyifttt.a
 	cc tester.o -L. -lmyifttt -lcurl -o tester
 
@@ -21,8 +23,6 @@ ifttt.o: 	ifttt.c ifttt.h
 
 tester.o:	tester.c ifttt.h
 	$(CC) $(CFLAGS) -c -ansi $<
-
-all:	tester irtester blink button
 
 clean:
 	rm tester irtester *.o
