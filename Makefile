@@ -6,8 +6,11 @@ all:    tester irtester blink button
 tester: tester.o libmyifttt.a
 	cc tester.o -L. -lmyifttt -lcurl -o tester
 
-irtester: irtester.o 
-	cc irtester.o -lwiringPi -o irtester
+irtester: irtester.o libmyifttt.a
+	cc irtester.o -lwiringPi -L. -lmyifttt -lcurl -o irtester
+
+irtester.o: irtester.c ifttt.h
+	$(CC) $(CFLAGS) -c -ansi $<
 
 blink: blink.o 
 	cc blink.o -lwiringPi -o blink

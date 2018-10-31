@@ -35,7 +35,7 @@ void ALARM_ARMING() {
 
 void ALARM_ARMED() {
 
-    digitalWrite (1,  LOW) ;
+    digitalWrite (1, LOW) ;
     digitalWrite (2, HIGH) ;
     digitalWrite (4, LOW) ;
 
@@ -54,9 +54,9 @@ void ALARM_ARMED() {
 }
 
 void ALARM_TRIGGERED() {
-        
+  
+    int i = 0;        
     delay(10000);
-    int i = 0;
     
     while(i<5) {
 
@@ -86,11 +86,12 @@ void ALARM_TRIGGERED() {
 }
 
 void ALARM_SOUNDING() {
-
+	
+    int j;
     while(1) {
 
         if (digitalRead(3) == 0) {
-            
+           
             ALARM_OFF();
             break;
            
@@ -103,8 +104,8 @@ void ALARM_SOUNDING() {
             digitalWrite (1, LOW);
             digitalWrite (2, LOW) ;
             delay(2000);
-           
-        for(int j = 0; j < 1; j++) {
+        
+        for(j = 0; j < 1; j++) {
 
             ifttt("https://maker.ifttt.com/trigger/button_pressed/with/key/dImUb3e_p6ayih5X2iy8RE", "my1", "my 2", "my 33333");
 
@@ -116,14 +117,30 @@ void ALARM_SOUNDING() {
 
 int main(int argc, char *argv[])
 {
-  int i;
+  int i; 
+  printf("wiringPiSetup Start\n"); 
   wiringPiSetup () ;
-  pinMode(0, INPUT);	// motion sensor
-  pinMode(1, OUTPUT);	// led 1
-  pinMode(2, OUTPUT);	// led 2
-  pinMode(3, INPUT);	// switch
-  pinMode(4, OUTPUT);	// buzzer
+ 
+ printf("pinMode 0 start\n");
+  pinMode(0, INPUT);	/* motion sensor */
+
+printf("pinMode 01 start\n");
+
+  pinMode(1, OUTPUT);	/* led 1 */
+
+printf("pinMode 02 start\n");
+
+  pinMode(2, OUTPUT);	/* led 2 */
+printf("pinMode 03 start\n");
+
+  pinMode(3, INPUT);	/* switch */
+printf("pinMode 04 start\n");
+
+  pinMode(4, OUTPUT);	/* buzzer */
+printf("pinMode 05 start\n");
+
   pullUpDnControl(3, PUD_UP) ;
+printf("pinMode 06 start\n");
 
   /*NOTREACHED*/
   return 0 ;
