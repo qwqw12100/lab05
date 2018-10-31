@@ -15,14 +15,12 @@ void ALARM_OFF() {
     digitalWrite (1, LOW) ;    
     digitalWrite (2, LOW) ;  
     digitalWrite (4, LOW) ;
-
-  while(1){    
-    if (digitalRead(3) == 0) {
-
+    
+    while (digitalRead(3) == 1); 
         ALARM_ARMING();
 
-    }
-  }
+    
+  
 }
 
 void ALARM_ARMING() {
@@ -143,4 +141,5 @@ printf("pinMode 05 start\n");
 
   pullUpDnControl(3, PUD_UP) ;
 printf("pinMode 06 start\n");
+  ALARM_OFF();
 }
