@@ -2,8 +2,8 @@
 #include <wiringPi.h>
 #include "ifttt.h"
 #include <time.h>
-
-
+/*  按下去0，不按是1  */
+/*  有人是0，没人是1  */
   void ALARM_ARMED();
   void ALARM_ARMING();
   void ALARM_OFF();
@@ -16,18 +16,17 @@ void ALARM_OFF() {
     digitalWrite (2, LOW) ;  
     digitalWrite (4, LOW) ;
     
-    while (digitalRead(3) == 1); 
+    while (digitalRead(3) == 0); 
         ALARM_ARMING();
-
-    
-  
+		
 }
 
 void ALARM_ARMING() {
 
     delay(10000);
-    digitalWrite (1, HIGH) ; delay(1000) ;  
-    digitalWrite (1,  LOW) ;
+    digitalWrite (1, HIGH) ; 
+	delay(1000) ;  
+    digitalWrite (1, LOW) ;
     digitalWrite (2, HIGH) ;
     ALARM_ARMED();
 
@@ -39,18 +38,21 @@ void ALARM_ARMED() {
     digitalWrite (2, HIGH) ;
     digitalWrite (4, LOW) ;
 
-    if (digitalRead(3) == 0) {
+    while(digitalRead(3) == 0 || digitalRead(0) == 0) {
+	 
+	 if (digitalRead(3) == 0){
+ 
+		ALARM_OFF();
+		
+	 }
+     
+	 if (digitalRead(0) == 0){
+     
+		ALARM_TRIGGERED();
 
-        ALARM_OFF();
+	 }
 
     }
-
-     if (digitalRead(0) == 0) {
-
-        ALARM_TRIGGERED();
-
-    }
-
 }
 
 void ALARM_TRIGGERED() {
@@ -58,21 +60,20 @@ void ALARM_TRIGGERED() {
     int i = 0;        
     delay(10000);
     
-    while(i<5) {
+    while( i<5 || digitalRead(3) == 0) {
 
         if (digitalRead(3) == 0) {
      
             ALARM_OFF();
-            break;
 
         }   
 
         digitalWrite (1, HIGH) ;
         digitalWrite (2, HIGH) ;
-        delay(2000);
+        delay(1000);
         digitalWrite (1, LOW) ;
         digitalWrite (2, LOW) ;
-        delay(2000);
+        delay(1000);
         i++;
 
     }
@@ -88,23 +89,23 @@ void ALARM_TRIGGERED() {
 void ALARM_SOUNDING() {
 	
     int j;
-    while(1) {
+    while(digitalRead(3) == 0) {
 
         if (digitalRead(3) == 0) {
            
             ALARM_OFF();
-            break;
            
-
         }   
 
             digitalWrite (1, HIGH) ;
             digitalWrite (2, HIGH) ;
+			digitalWrite (4, HIGH) ;
             delay(2000);
             digitalWrite (1, LOW);
-            digitalWrite (2, LOW) ;
+            digitalWrite (2, LOW);
+			digitalWrite (4, LOW) ;
             delay(2000);
-        
+			
         for(j = 0; j < 1; j++) {
 
             ifttt("https://maker.ifttt.com/trigger/button_pressed/with/key/dImUb3e_p6ayih5X2iy8RE", "my1", "my 2", "my 33333");
@@ -116,8 +117,7 @@ void ALARM_SOUNDING() {
 }
 
 int main(int argc, char *argv[])
-{
-  int i; 
+{ 
   printf("wiringPiSetup Start\n"); 
   wiringPiSetup () ;
  
