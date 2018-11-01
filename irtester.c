@@ -12,18 +12,21 @@
 
 void ALARM_OFF() {
 
-    digitalWrite (1, HIGH) ;    
-    digitalWrite (2, LOW) ;  
-    digitalWrite (4, LOW) ;
+    digitalWrite (1, HIGH) ; /*绿灯亮 */   
+    digitalWrite (2, LOW) ;  /*红灯灭 */ 
+    digitalWrite (4, LOW) ; /*关喇叭 */ 
     
-    while (digitalRead(3) == 0); 
-        ALARM_ARMING();
+    while (digitalRead(3) == 1); 
+	
+    if (digitalRead(3) == 0){
+		ALARM_ARMING();
+    }
 		
 }
 
 void ALARM_ARMING() {
 	
-	int k;
+	int k = 0;
     delay(10000);
     
 	while(k<10){
@@ -31,7 +34,8 @@ void ALARM_ARMING() {
 	  digitalWrite (1, HIGH) ; 
 	  delay(1000) ;  
 	  digitalWrite (1, LOW) ;
-	  k++;	
+	  k++;
+	  
 	}
 	
 	digitalWrite (2, HIGH) ;
@@ -45,20 +49,14 @@ void ALARM_ARMED() {
     digitalWrite (2, HIGH) ;
     digitalWrite (4, LOW) ;
 
-    while(digitalRead(3) == 0 || digitalRead(0) == 0) {
+    while(digitalRead(3) == 1 && digitalRead(0) == 1);
 	 
-	 if (digitalRead(3) == 0){
- 
+	if (digitalRead(3) == 0){
 		ALARM_OFF();
-		
-	 }
+	}
      
-	 if (digitalRead(0) == 0){
-     
+	if (digitalRead(0) == 0){
 		ALARM_TRIGGERED();
-
-	 }
-
     }
 }
 
@@ -67,24 +65,20 @@ void ALARM_TRIGGERED() {
     int i = 0;        
     delay(10000);
     
-    while( i<5 || digitalRead(3) == 0) {
-
-        if (digitalRead(3) == 0) {
-     
-            ALARM_OFF();
-
-        }   
-
-        digitalWrite (1, HIGH) ;
-        digitalWrite (2, HIGH) ;
-        delay(1000);
-        digitalWrite (1, LOW) ;
-        digitalWrite (2, LOW) ;
-        delay(1000);
+    while( i<5 && digitalRead(3) == 1) {
+		digitalWrite (1, HIGH) ;
+		digitalWrite (2, HIGH) ;
+		delay(1000);
+		digitalWrite (1, LOW) ;
+		digitalWrite (2, LOW) ;
+		delay(1000);
         i++;
-
     }
-    
+	
+    if (digitalRead(3) == 0) { 
+        ALARM_OFF();
+    } 			
+		
     if( i == 5){
 
         ALARM_SOUNDING();
@@ -96,13 +90,9 @@ void ALARM_TRIGGERED() {
 void ALARM_SOUNDING() {
 	
     int j;
-    while(digitalRead(3) == 0) {
+    while(digitalRead(3) == 1) {
 
-        if (digitalRead(3) == 0) {
-           
-            ALARM_OFF();
-           
-        }   
+          
 
             digitalWrite (1, HIGH) ;
             digitalWrite (2, HIGH) ;
@@ -120,6 +110,12 @@ void ALARM_SOUNDING() {
         }
 
     }
+	
+	if (digitalRead(3) == 0) {
+           
+        ALARM_OFF();
+           
+    } 
 
 }
 
