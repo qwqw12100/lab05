@@ -12,7 +12,7 @@
 
 void ALARM_OFF() {
 
-    digitalWrite (1, LOW) ;    
+    digitalWrite (1, HIGH) ;    
     digitalWrite (2, LOW) ;  
     digitalWrite (4, LOW) ;
     
@@ -22,12 +22,19 @@ void ALARM_OFF() {
 }
 
 void ALARM_ARMING() {
-
+	
+	int k;
     delay(10000);
-    digitalWrite (1, HIGH) ; 
-	delay(1000) ;  
-    digitalWrite (1, LOW) ;
-    digitalWrite (2, HIGH) ;
+    
+	while(k<10){
+	  
+	  digitalWrite (1, HIGH) ; 
+	  delay(1000) ;  
+	  digitalWrite (1, LOW) ;
+	  k++;	
+	}
+	
+	digitalWrite (2, HIGH) ;
     ALARM_ARMED();
 
 }
@@ -101,8 +108,8 @@ void ALARM_SOUNDING() {
             digitalWrite (2, HIGH) ;
 			digitalWrite (4, HIGH) ;
             delay(2000);
-            digitalWrite (1, LOW);
-            digitalWrite (2, LOW);
+            digitalWrite (1, LOW) ;
+            digitalWrite (2, LOW) ;
 			digitalWrite (4, LOW) ;
             delay(2000);
 			
